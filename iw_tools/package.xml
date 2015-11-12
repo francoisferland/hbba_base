@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <package>
-  <name>iw</name>
+  <name>iw_tools</name>
   <version>0.0.0</version>
   <description>
-      HBBA's Intention Workspace implementation for ROS.
+      Tools to interface with the Intention Workspace (IW) of HBBA.
   </description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag --> 

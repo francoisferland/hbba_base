@@ -1,29 +1,13 @@
-HBBA - Hybrid Behavior-Based Architecture
-=========================================
+hbba_base - Hybrid Behavior-Based Architecture base modules
+===========================================================
 
-This is the (in progress) implementation of HBBA, the robot control architecture
-built at 3IT-IntRoLab (Université de Sherbrooke).
-It has been built with ROS and our robots (IRL-1/TR and /AZ3 variants) in mind,
-but has been designed to be compatible with various platforms.
+This set of packages contains base modules for HBBA: ROS messages and tools for
+interfacing with the Intention Workspace.
+They have no external dependencies beyond ROS base modules such as topic_tools.
 
-To build the Intention Translator, which relies on Google or-tools, you need to
-install these packages (on Ubuntu 14.04):
+The goal of this set of packages is to remove large external dependencies pulled
+in by the iw_translator (mainly or-tools) and script_engine packages, which
+should make using HBBA easier to use from a remote system.
 
- - bison
- - flex
- - python-setuptools
- - python-dev
- - autoconf
- - libtool
- - zlib1g-dev
- - texinfo
- - gawk 
- - g++
- - curl
- - texlive
- - subversion
- - make
- - gettext
-
-Furthermore, libv8-dev is required by the IW Script Engine.
+For the full distribution, see https://github.com/francoisferland/HBBA.
 
