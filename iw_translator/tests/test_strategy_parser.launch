@@ -1,7 +1,0 @@
-<launch>
-    <!-- Simple launch file to test the strategy parser. -->
-
-    <rosparam command="load" file="$(find iw_translator)/tests/model.yaml"/>
-    <node name="test_strategy_parser" pkg="iw_translator"
-        type="test_strategy_parser" output="screen"/>
-</launch>

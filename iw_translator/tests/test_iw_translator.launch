@@ -1,8 +1,0 @@
-<launch>
-    <!-- Simple launch file to test a standalone IWTranslator. -->
-
-    <rosparam command="load" file="$(find iw_translator)/tests/model.yaml"/>
-    <node name="iw_translator" pkg="iw_translator"
-        type="iw_translator_node" output="screen"
-    />
-</launch>
