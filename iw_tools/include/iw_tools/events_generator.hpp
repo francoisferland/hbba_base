@@ -13,7 +13,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <map>
 
-namespace iw
+namespace iw_tools
 {
     /// \brief A module that generates messages from events happening in the
     /// Intention Workspace.

@@ -1,7 +1,7 @@
-#include <iw/events_generator.hpp>
+#include <iw_tools/events_generator.hpp>
 #include <algorithm>
 
-using namespace iw;
+using namespace iw_tools;
 
 EventsGenerator::EventsGenerator(ros::NodeHandle& n, ros::NodeHandle& np)
 {

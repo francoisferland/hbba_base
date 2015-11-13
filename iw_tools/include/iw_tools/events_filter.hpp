@@ -6,7 +6,7 @@
 #include <boost/function.hpp>
 #include <string>
 
-namespace iw
+namespace iw_tools
 {
     /// \brief An IW events filter for a single desire ID with callback.
     ///

@@ -10,7 +10,7 @@
 #include <ros/ros.h>
 #include <boost/shared_ptr.hpp>
 
-namespace iw
+namespace iw_tools
 {
     namespace impl
     {

@@ -1,6 +1,6 @@
-#include <iw/events_filter.hpp>
+#include <iw_tools/events_filter.hpp>
 
-using namespace iw;
+using namespace iw_tools;
 
 EventsFilter::EventsFilter(ros::NodeHandle& n, const std::string& id):
     id_(id)

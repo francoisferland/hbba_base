@@ -2,9 +2,9 @@
 /// \file rosgraph_monitor.cpp \brief Copied from rosgraph_gl and adapted to iw.
 ///
 
-#include <iw/rosgraph_monitor.hpp>
+#include <iw_tools/rosgraph_monitor.hpp>
 
-using namespace iw;
+using namespace iw_tools;
 
 impl::TopicHandler::TopicHandler(
     ros::NodeHandle& n, 
