@@ -3,7 +3,7 @@
 # Test script for events_generator.
 # Configured for jn0_hbba_cfg's irl1_test_episodic_memory.
 
-import roslib; roslib.load_manifest("iw")
+import roslib; roslib.load_manifest("iw_tools")
 import rospy;
 from hbba_msgs.msg import *
 from hbba_msgs.srv import *
