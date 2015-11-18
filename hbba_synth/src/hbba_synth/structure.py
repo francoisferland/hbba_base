@@ -301,13 +301,15 @@ class Structure:
             print "Exploitation matches: " + str(self.exploitationMatches)
         
         # XML launch file, first pass
+        # NOTE: Adding the elements also resolve dependencies such as filters
+        # enumeration. This is not ideal, but necessary even if we don't use the
+        # XML elements in model-only mode.
         launch_elem = Element("launch")
+        main_elems = []
         if not opts.behavior_based:
             if verbose:
                 print "Adding base HBBA nodes"
-            launch_elem.append(baseNodesXML(opts.new_rev, opts.debug))
-
-        main_elems = []
+            main_elems.append(baseNodesXML(opts.new_rev, opts.debug))
         for p in self.procmodules.values():
             main_elems.extend(p.generateXML(self, opts))
         for b in self.behaviors.values():

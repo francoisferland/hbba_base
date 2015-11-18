@@ -12,8 +12,11 @@ def main():
             help="defines the base name for the produced files (default: %default)", 
             metavar="DIRECTORY")
     opt_parser.add_option("-n", "--new-rev", action="store_true",
-            dest="new_rev", default=False,
-            help="Use the revision of the IW Solver.")
+            dest="new_rev", default=True,
+            help="Use the new revision of the IW Solver (legacy option, now default.")
+    opt_parser.add_option("--old-rev", action="store_false",
+            dest="new_rev",
+            help="Use the old revision of the IW Solver (no longer maintained).",)
     opt_parser.add_option("-m", "--model-only", action="store_true",
             dest="model_only", default=False,
             help="Only output the IW model (new revision only).")
