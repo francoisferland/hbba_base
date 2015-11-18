@@ -23,6 +23,9 @@ def main():
     opt_parser.add_option("-a", "--disable-arbitration", action="store_true",
             dest="disable_arbitration", default=False,
             help="arbitration nodes are not generated for behavior output topics.")
+    opt_parser.add_option("-e", "--no-base-nodes", action="store_true",
+            dest="no_base_nodes", default=False,
+            help="'external' mode, does not add HBBA base nodes to launch file (default: %default).")
     opt_parser.add_option("-i", "--includes", action="store_true",
             dest="includes", default=False,
             help="only output the list of included files.")

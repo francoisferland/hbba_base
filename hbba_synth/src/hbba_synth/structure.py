@@ -305,11 +305,11 @@ class Structure:
         # enumeration. This is not ideal, but necessary even if we don't use the
         # XML elements in model-only mode.
         launch_elem = Element("launch")
-        main_elems = []
-        if not opts.behavior_based:
+        if (not opts.behavior_based) and (not opts.no_base_nodes):
             if verbose:
                 print "Adding base HBBA nodes"
-            main_elems.append(baseNodesXML(opts.new_rev, opts.debug))
+            launch_elem.append(baseNodesXML(opts.new_rev, opts.debug))
+        main_elems = []
         for p in self.procmodules.values():
             main_elems.extend(p.generateXML(self, opts))
         for b in self.behaviors.values():
