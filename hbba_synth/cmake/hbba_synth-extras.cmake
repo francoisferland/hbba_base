@@ -7,9 +7,10 @@ include(CMakeParseArguments)
 # root source file for your setup.
 # The BHVR argument indicates that the configuration should be generated in pure
 # behavior-based mode.
+# The EXTERNAL parameter specifies that base nodes should not be added to the
+# generated launch file.
 # The OLDREV argument activates code generation in the old revision of
 # hbba_synth (unsupported).
-
 macro(add_hbba_cfg _BASENAME _SRC)
     set(_options OLDREV BHVR)
     cmake_parse_arguments(ARG "${_options}" "" "" ${ARGN}) 
@@ -78,5 +79,10 @@ macro(add_hbba_cfg _BASENAME _SRC)
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
     )
     add_custom_target(${_BASENAME} ALL DEPENDS ${_HBBA_CFG_OUTPUT})
+
+    install(FILES ${_HBBA_CFG_OUTPUT}
+            DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/hbba_cfg_out
+    )
+
 endmacro(add_hbba_cfg)
 
