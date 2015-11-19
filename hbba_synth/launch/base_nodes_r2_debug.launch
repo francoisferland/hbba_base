@@ -3,7 +3,7 @@
         <node name="iw" pkg="iw" type="iw"/>
         <node name="iw_translator" pkg="iw_translator" type="iw_translator_node"
             output="screen"/>
-        <node name="events_generator" pkg="iw" type="events_generator"/>
+        <node name="events_generator" pkg="iw_tools" type="events_generator"/>
         <rosparam>
             solver_model:
                 solver_log:   true
