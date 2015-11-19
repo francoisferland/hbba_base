@@ -13,7 +13,6 @@ import roslib
 import rospy
 from hbba_msgs.msg import *
 from hbba_msgs.srv import *
-from script_engine.srv import EvalScript
 from emotions_msgs.msg import Intensity
 
 import os

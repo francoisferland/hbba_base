@@ -70,6 +70,12 @@ add_service_files(
   RemoveDesires.srv 
   SetDesireIntensity.srv
   UpdateDesires.srv
+  # script_engine-related:
+  Boolean.srv
+  CompileScript.srv
+  EvalScript.srv
+  RunScript.srv
+  UpdateRate.srv
 )
 
 ## Generate actions in the 'action' folder
