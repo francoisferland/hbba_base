@@ -589,6 +589,17 @@ class DesireDef:
 
         return d_str
 
+    def generateJSON(self):
+        data = {}
+        data["id"]        = self.desire_id
+        data["type"]      = self.desire_type
+        data["utility"]   = self.utility
+        data["intensity"] = self.intensity
+        data["params"]    = self.params
+        data["security"]  = self.security
+
+        return data
+
 class BehaviorPriorityDef:
     def __init__(self, content, structure, verbose=False):
         if type(content) is not dict:

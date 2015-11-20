@@ -267,6 +267,15 @@ class Structure:
 
         return n
 
+    def initialDesiresXML(self, opts):
+        init_desires = []
+        for d in self.desires.values():
+            init_desires.append(d.generateJSON())
+        n = Element("rosparam")
+        n.text = str({'hbba': {'initial_desires': init_desires}})
+
+        return n
+
     def generate(self, basepath, opts):
         if (opts.includes):
             # Just print out includes and quit here - only used for dependency
@@ -380,6 +389,8 @@ class Structure:
                 launch_elem.append(self.topicFiltersXML(opts))
                 # The static list of exploitation matches:
                 launch_elem.append(self.generateExploitationMatchesXML(opts))
+                # The static list of initial desires:
+                launch_elem.append(self.initialDesiresXML(opts))
 
         elif verbose:
             print "Behavior-based mode - no Python script generated."
