@@ -1,0 +1,32 @@
+#!/usr/bin/env python
+
+# This script calls the add_desires service based on an array of Desire
+# definitions found on the parameter server at /hbba/initial_desires
+
+import roslib
+import rospy
+from hbba_msgs.msg import *
+from hbba_msgs.srv import *
+
+rospy.init_node("load_desires", anonymous=True)
+
+rospy.wait_for_service("hbba/add_desires", 30.0)
+add_desires = rospy.ServiceProxy("hbba/add_desires", AddDesires)
+
+desires = rospy.get_param("hbba/initial_desires")
+
+d_msgs = []
+for d in desires:
+    d_msg = Desire()
+    d_msg.id        = d["id"]
+    d_msg.type      = d["type"]
+    d_msg.utility   = d["utility"]
+    d_msg.intensity = d["intensity"]
+    d_msg.params    = d["params"]
+    d_msg.security  = d["security"]
+
+    print("Adding '{0}'...".format(d_msg.id))
+    d_msgs.append(d_msg)
+
+add_desires(d_msgs)
+
