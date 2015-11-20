@@ -113,6 +113,9 @@ target_link_libraries(exploitation_matcher ${PROJECT_NAME} ${catkin_LIBRARIES})
 add_dependencies(exploitation_matcher hbba_msgs_generate_messages_cpp)
 add_dependencies(events_generator     hbba_msgs_generate_messages_cpp)
 
+add_executable(goto_generator src/goto_generator.cpp)
+target_link_libraries(goto_generator ${PROJECT_NAME} ${catkin_LIBRARIES})
+
 #############
 ## Install ##
 #############
