@@ -3,6 +3,7 @@
 
 import json
 import rospy
+import numbers
 
 from hbba_msgs.msg import Desire
 from hbba_msgs.srv import AddDesires, RemoveDesires
@@ -40,14 +41,14 @@ class IWClient:
                    security = False,
                    d_id=""): 
         """ Add a desire from the given arguments (with some defaults, except
-        for type (d_type)"""
+        for type (d_type). Returns the generated id."""
 
-        assert(type(d_type)    is str),   "Desire type (d_type) is not a string"
-        assert(type(d_id)      is str),   "Desire id (d_id) is not a string"
-        assert(type(intensity) is float), "Desire intensity is not a float"
-        assert(type(utility)   is float), "Desire utility is not a float"
-        assert(type(params)    is dict),  "Desire params is not a dict"
-        assert(type(security)  is bool),  "Desire security is not a bool"
+        assert(isinstance(d_type,    str)),          "Desire type (d_type) is not a string"
+        assert(isinstance(d_id,      str)),          "Desire id (d_id) is not a string"
+        assert(isinstance(intensity, numbers.Real)), "Desire intensity is not a float"
+        assert(isinstance(utility,   numbers.Real)), "Desire utility is not a float"
+        assert(isinstance(params,    dict)),         "Desire params is not a dict"
+        assert(isinstance(security,  bool)),         "Desire security is not a bool"
 
         if (d_id == ""):
             d_id = generate_id("iwc_" + d_type)
@@ -61,6 +62,13 @@ class IWClient:
         d.security  = security
 
         self.add_raw_desire(d)
+        return d_id
+
+    def rem_desire(self, desire_id):
+        """ Remove a desire based on its ID. """
+        assert(type(desire_id) is str), "Desire id is not a string"
+
+        self.scl_rem([desire_id])
 
 if __name__ == "__main__":
     # Simple test script to make sure a link with the IW is available.
