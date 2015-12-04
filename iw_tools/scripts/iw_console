@@ -9,7 +9,7 @@ from hbba_msgs.srv import *
 
 # Syntax: add type [intensity] [utility] [params]
 # Anything passed [utility] is packed into the params string.
-# Syntax: del id1 [id2] ...
+# Syntax: rem id1 [id2] ...
 
 def gatherClasses():
     strats = rospy.get_param("hbba/solver_model/strategies")
@@ -40,13 +40,22 @@ class Shell:
         readline.parse_and_bind("tab: complete")
 
         self.scl_add = rospy.ServiceProxy("hbba/add_desires",    AddDesires)
-        self.scl_del = rospy.ServiceProxy("hbba/remove_desires", RemoveDesires)
+        self.scl_rem = rospy.ServiceProxy("hbba/remove_desires", RemoveDesires)
 
-        self.commands = ['add', 'del', 'help', 'quit']
+        self.sub_des = rospy.Subscriber("hbba/desires_set", DesiresSet, self.sub_des)
+
+        self.commands = ['add', 'rem', 'list', 'help', 'quit']
+
         self.desire_classes = gatherClasses()
 
         self.current_id = 0
         self.ids = []
+
+    def sub_des(self, msg):
+        """ Refreshes the current desires list. """
+        self.ids = []
+        for d in msg.desires:
+            self.ids.append(d.id)
 
     def parseLine(self, text, final = False):
         tokens = text.split()
@@ -56,7 +65,7 @@ class Shell:
         opts   = []
 
         desire  = Desire()
-        del_ids = []
+        rem_ids = []
 
         for t in tokens:
             if (state == 0):    # Init
@@ -65,14 +74,19 @@ class Shell:
                     cmd = "add"
                     opts = self.desire_classes
                     continue
-                elif (t.lower() == "del"):
+                elif (t.lower() == "rem"):
                     state = 5
-                    cmd = "del"
+                    cmd = "rem"
                     opts = self.ids
                     continue
                 elif (t.lower() == "help"):
                     state = 6
                     cmd = "help"
+                    opts = []
+                    continue
+                elif (t.lower() == "list"):
+                    state = 7
+                    cmd = "list"
                     opts = []
                     continue
                 else:
@@ -97,7 +111,7 @@ class Shell:
                 desire.params += t + " "
                 continue
             elif (state == 5):
-                del_ids.append(t)
+                rem_ids.append(t)
 
         desire.params.strip()
 
@@ -106,12 +120,14 @@ class Shell:
                 if (state > 1):
                     self.addDesire(desire)
                 else:
-                    print "Missing critical desire type info."
-            elif (cmd == "del"):
-                if (len(del_ids) > 0):
-                    self.delDesires(del_ids)
+                    print "Missing or invalid desire type."
+            elif (cmd == "rem"):
+                if (len(rem_ids) > 0):
+                    self.remDesires(rem_ids)
                 else:
-                    print "Missing desire id(s) to delete."
+                    print "Missing desire id(s) to remove."
+            elif (cmd == "list"):
+                self.printDesires()
             elif (cmd == "help"):
                 self.printSyntax()
 
@@ -124,20 +140,28 @@ class Shell:
         print desire
         self.scl_add.call([desire])
 
-    def delDesires(self, del_ids):
-        print "Deleting ", del_ids, "..."
-        for d in del_ids:
+    def remDesires(self, rem_ids):
+        print "Removing ", rem_ids, "..."
+        for d in rem_ids:
             if (d in self.ids):
                 self.ids.remove(d)
-        self.scl_del.call(del_ids)
+        self.scl_rem.call(rem_ids)
 
     def printSyntax(self):
         print "Syntax :"
         print "  add Class [intensity] [utility] [params]"
-        print "  del id1 [id2] ..."
+        print "  rem id1 [id2] ..."
         print ""
         print "For the add command, anything passed the [utility] arg is"
         print "appended in a single params string."
+
+    def printDesires(self):
+        ids = ""
+        for d in self.ids:
+            ids += d + " "
+
+        print "Current desire(s) id(s):"
+        print ids
 
     def loop(self):
         print "Type 'help' for syntax."
