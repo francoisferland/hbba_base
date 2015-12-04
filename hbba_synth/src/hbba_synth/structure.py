@@ -67,6 +67,11 @@ def baseNodesXML(new_rev, debug):
         'file': "$(find hbba_synth)/launch/{0}".format(fname)})
     return e
 
+def eventNodesXML():
+    e = Element("include", attrib = {
+        'file': "$(find hbba_synth)/launch/base_events.launch"})
+    return e
+
 
 class Structure:
     def __init__(self):
@@ -319,10 +324,17 @@ class Structure:
         # enumeration. This is not ideal, but necessary even if we don't use the
         # XML elements in model-only mode.
         launch_elem = Element("launch")
-        if (not opts.behavior_based) and (not opts.no_base_nodes):
-            if verbose:
-                print "Adding base HBBA nodes"
-            launch_elem.append(baseNodesXML(opts.new_rev, opts.debug))
+
+        if (not opts.behavior_based):
+            if (not opts.no_base_nodes):
+                if verbose:
+                    print "Adding base HBBA nodes"
+                launch_elem.append(baseNodesXML(opts.new_rev, opts.debug))
+            if (not opts.no_event_gen):
+                if verbose:
+                    print "Adding base event generators."
+                launch_elem.append(eventNodesXML())
+
         main_elems = []
         for p in self.procmodules.values():
             main_elems.extend(p.generateXML(self, opts))
