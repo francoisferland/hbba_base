@@ -160,10 +160,11 @@ namespace iw
                 // done once.
                 StampedPose pose;
                 if (!parseGoal(d.params, pose)) {
-                    ROS_ERROR(
-                        "Cannot parse goal from desire '%s': '%s'",
-                        d.id.c_str(),
-                        d.params.c_str());
+                    ROS_DEBUG(
+                        "Error: Cannot parse goal '%s' from desire '%s', "
+                        "ignoring.",
+                        d.params.c_str(),
+                        d.id.c_str());
                     continue;
                 }
 
