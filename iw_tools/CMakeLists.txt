@@ -9,6 +9,8 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   hbba_msgs
   topic_tools
+  actionlib
+  move_base_msgs
 )
 
 ## System dependencies are found with CMake's conventions

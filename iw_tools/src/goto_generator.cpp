@@ -2,13 +2,20 @@
 
 #include <iw_tools/common.hpp>
 #include <geometry_msgs/PoseStamped.h>
+#include <move_base_msgs/MoveBaseAction.h>
 #include <hbba_msgs/AddDesires.h>
 #include <hbba_msgs/RemoveDesires.h>
 #include <iw_tools/events_filter.hpp>
+#include <actionlib/server/simple_action_server.h>
+#include <actionlib/action_definition.h>
 #include <ros/ros.h>
 
 namespace iw_tools 
 {
+    /// \brief A SimpleActionServer for move base goals.
+    typedef actionlib::SimpleActionServer<move_base_msgs::MoveBaseAction>
+            GoToServer;
+
     /// \brief A demo motivation class that generates GoTo desires.
     ///
     /// This class is meant as a motivation sample.
@@ -16,6 +23,8 @@ namespace iw_tools
     /// The desire is removed when the goal is achieved (monitored by HBBA
     /// events).
     ///
+    /// Action:
+    ///  - goto:        A move_base_msgs/MoveBaseAction server.
     /// Topics:
     ///  - ~goal:       A geometry_msgs/PoseStamped input.
     ///  - hbba_events: HBBA events input.
@@ -27,6 +36,8 @@ namespace iw_tools
         ros::ServiceClient              scl_add_desires_;
         ros::ServiceClient              scl_rem_desires_;
         boost::scoped_ptr<EventsFilter> filter_;
+
+        GoToServer                      goto_server_;
 
         hbba_msgs::AddDesires           req_add_desires_;
         std::vector<hbba_msgs::Desire>& desires_set_;
@@ -44,6 +55,10 @@ namespace iw_tools
         /// \param n  Node handle for main topics and services.
         /// \param np Node handle for private topics, parameters.
         GoToGenerator(ros::NodeHandle& n, ros::NodeHandle& np):
+            goto_server_(n,
+                         "goto",
+                         boost::bind(&GoToGenerator::execute, this, _1),
+                         false),
             desires_set_(req_add_desires_.request.desires),
             desires_ids_(req_rem_desires_.request.ids)
         {
@@ -69,13 +84,15 @@ namespace iw_tools
             filter_.reset(new EventsFilter(n, goto_d.id));
             filter_->allEventsCB(&GoToGenerator::eventsCB, this);
 
+            goto_server_.start();
+
         }
 
     private:
-        void goalCB(const geometry_msgs::PoseStamped::ConstPtr& msg)
+        void goalCB(const geometry_msgs::PoseStamped& msg)
         {
             // From common.hpp:
-            poseStampedToNavGoal(*msg, desires_set_[DES_GOTO].params); 
+            poseStampedToNavGoal(msg, desires_set_[DES_GOTO].params); 
 
             scl_add_desires_.call(req_add_desires_);
         }
@@ -84,7 +101,14 @@ namespace iw_tools
         {
             if (evt.type == hbba_msgs::Event::ACC_ON) {
                 scl_rem_desires_.call(req_rem_desires_);
+                goto_server_.setSucceeded();
             }
+        }
+
+        void execute(const move_base_msgs::MoveBaseGoalConstPtr& goal)
+        {
+            goalCB(goal->target_pose);
+            
         }
 
     };
