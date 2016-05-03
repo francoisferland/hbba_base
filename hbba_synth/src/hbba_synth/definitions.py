@@ -772,6 +772,7 @@ class TopicDef:
             self.name = content
             self.src = content
             self.filtered = None
+            self.filter_type = "GenericDivider"
 
     def getRootTopicFullName(self):
         return self.structure.getRootTopicFullName(self.src)
