@@ -56,8 +56,10 @@ hbba_conf:
     name: manyears 
     launch: {pkg: "jn0_bringup", path: "launch/jn0_manyears.launch"}
     input:
-        # NOTE: Filter types are ignored for now
-        - audio_stream: {type: GenericDivisor}
+        # Available filter types are GenericDivider and GenericDividerAD
+        # (auto-disconnects the input subscriber when the rate is 0 or nobody is
+        # subscribed on the output).
+        - audio_stream: {type: GenericDivider}
         - second_input: {filtered: false}
     output: # Automatically remapped to root.
         - source_pose

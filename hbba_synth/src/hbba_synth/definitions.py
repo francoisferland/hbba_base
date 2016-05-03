@@ -242,7 +242,7 @@ class ProcModuleDef:
         if self.verbose:
             print "Adding filter {0}".format(filter_name)
         self.structure.addFilter(FilterDef(filter_name, filter_type))
-        elems.append(Element("node", attrib = {
+        filt_node = Element("node", attrib = {
             'name': node_name,
             'pkg': 'topic_filters',
             'type': 'generic_divider_node',
@@ -250,7 +250,15 @@ class ProcModuleDef:
                 "{0} {1}/{2}".format(
                     self.structure.getRootTopicFullName(topic.src), 
                     self.name, topic.name)
+        })
+
+        if (topic.filter_type == 'GenericDividerAD'):
+            filt_node.append(Element("rosparam", attrib = {
+                'name':  'auto_disconnect',
+                'value': 'True'
             }))
+
+        elems.append(filt_node)
 #        elems.append(Element("node", attrib={
 #            'name': "register_{0}".format(node_name),
 #            'pkg': 'topic_filters_manager',
