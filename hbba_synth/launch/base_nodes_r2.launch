@@ -3,6 +3,8 @@
         <node name="iw" pkg="iw" type="iw" output="screen"/>
         <node name="iw_translator" pkg="iw_translator" type="iw_translator_node"
             output="screen"/>
+        <node name="iw_observer" pkg="iw_observer" type="iw_observer_node"
+            output="screen"/>
         <rosparam>
             solver_model:
                 solver_log:  false
