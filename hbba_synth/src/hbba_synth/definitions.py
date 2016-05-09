@@ -253,7 +253,7 @@ class ProcModuleDef:
         })
 
         if (topic.filter_type == 'GenericDividerAD'):
-            filt_node.append(Element("rosparam", attrib = {
+            filt_node.append(Element("param", attrib = {
                 'name':  'auto_disconnect',
                 'value': 'True'
             }))

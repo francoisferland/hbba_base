@@ -416,7 +416,7 @@ class Structure:
             
             # The iw_observer ruleset as a rosparam:
             if (len(self.iwoRuleset) > 0):
-                launch_elem.append(Element("rosparam",
+                launch_elem.append(Element("param",
                     name="/hbba/iw_observer/ruleset",
                     value = self.iwoRuleset))
 
