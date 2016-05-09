@@ -114,6 +114,9 @@ hbba_conf:
 # script engine at startup.
 - custom_script: "function publishGoToGoal(g) {publishNavGoal('goto_pose', g.frame_id, g.x, g.y, g.t);}"
 
+# And a set of rules to be given to the iw_observer:
+- iwo_ruleset: "des_on:Say -> del -;"
+
 # Defines a desire that is automatically added at startup.
 - desire:
     id: test_desire

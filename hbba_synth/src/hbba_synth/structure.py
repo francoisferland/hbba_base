@@ -91,6 +91,7 @@ class Structure:
         self.motivations = {}
         self.emoIntensities = {}
         self.customScript = ""
+        self.iwoRuleset = ""
 
     def addInclude(self, i):
         self.includes.append(i)
@@ -146,6 +147,9 @@ class Structure:
 
     def addCustomScript(self, s):
         self.customScript += s + "\n"
+
+    def addIWORuleset(self, s):
+        self.iwoRuleset += s + "\n"
 
     def registerExploitationMatch(self, b, d):
         p = b.priority
@@ -409,6 +413,12 @@ class Structure:
                 launch_elem.append(self.generateExploitationMatchesXML(opts))
                 # The static list of initial desires:
                 launch_elem.extend(self.initialDesiresXML(opts))
+            
+            # The iw_observer ruleset as a rosparam:
+            if (len(self.iwoRuleset) > 0):
+                launch_elem.append(Element("rosparam",
+                    name="/hbba/iw_observer/ruleset",
+                    value = self.iwoRuleset))
 
         elif verbose:
             print "Behavior-based mode - no Python script generated."

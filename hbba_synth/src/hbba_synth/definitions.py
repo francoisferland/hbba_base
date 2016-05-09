@@ -788,6 +788,16 @@ class CustomScriptDef:
         else:
             print "Error: custom_script entry is not a string."
 
+class IWORulesetDef:
+    def __init__(self, content, structure, verbose=False):
+        if type(content) is str:
+            if verbose:
+                print "Adding iw_observer ruleset: \n" + content
+            structure.addIWORuleset(content)
+        else:
+            print "Error: iwo_ruleset entry is not a string."
+
+
 ####
 
 typemap = {
@@ -804,6 +814,7 @@ typemap = {
     'integrated_arbitration': IntegratedArbitrationDef,
     'motivation': MotivationDef,
     'emo_intensity': EmoIntensityDef,
-    'custom_script': CustomScriptDef
+    'custom_script': CustomScriptDef,
+    'iwo_ruleset': IWORulesetDef
 }
 
