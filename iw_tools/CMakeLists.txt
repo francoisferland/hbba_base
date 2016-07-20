@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   topic_tools
   actionlib
   move_base_msgs
+  tf
 )
 
 ## System dependencies are found with CMake's conventions
@@ -117,6 +118,9 @@ add_dependencies(events_generator     hbba_msgs_generate_messages_cpp)
 
 add_executable(goto_generator src/goto_generator.cpp)
 target_link_libraries(goto_generator ${PROJECT_NAME} ${catkin_LIBRARIES})
+
+add_executable(face_pose_xy_node src/face_pose_xy_node.cpp)
+target_link_libraries(face_pose_xy_node ${PROJECT_NAME} ${catkin_LIBRARIES})
 
 #############
 ## Install ##
