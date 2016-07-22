@@ -3,6 +3,8 @@
 
 /// \file common.hpp A set of common functions for generating HBBA desires.
 
+#include <hbba_msgs/AddDesires.h>
+#include <hbba_msgs/RemoveDesires.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <std_msgs/String.h>
 #include <tf/tf.h>
@@ -95,27 +97,47 @@ namespace iw_tools
         goal_t.header.stamp    = pose_b.header.stamp;
         tf::pointTFToMsg(goal_p,      goal_t.pose.position);
         tf::quaternionTFToMsg(goal_q, goal_t.pose.orientation);
-
-        ROS_DEBUG("Pos A: (%f, %f)", pos_a.x(),     pos_a.y());
-        ROS_DEBUG("Pos B: (%f, %f)", pos_b.x(),     pos_b.y());
-        ROS_DEBUG("B - A: (%f, %f)", ab.x(),        ab.y());
-        ROS_DEBUG("Goal:  (%f, %f)", goal_p.x(),    goal_p.y());
-        ROS_DEBUG("Dist between A and B: %f", ab_l);
     }
 
-    /// \brief Converts a PoseStamped message into a navigation goal string.
+    /// \brief Converts a (x,y,theta) tuple into a navigation goal string.
+    ///
+    /// See pubNavGoal plugin for HBBA's script_engine for details.
+    inline void poseToNavGoal(const std::string&    frame_id,
+                              const double          x,
+                              const double          y,
+                              const double          t,
+                              std::string&          out)
+    {
+        std::stringstream ss;
+        ss << "{frame_id: '" << frame_id << "', ";
+        ss << "x: " << x << ", ";
+        ss << "y: " << y << ", ";
+        ss << "t: " << t << "}";
+        out = ss.str();
+    }
+
+    /// \brief Converts a (x,y,theta) tuple into a navigation goal string.
+    ///
+    /// See pubNavGoal plugin for HBBA's script_engine for details.
+    inline void poseToNavGoal(const std::string&    frame_id,
+                              const tf::Point&      pt,
+                              std::string&          out)
+    {
+        poseToNavGoal(frame_id, pt.x(), pt.y(), pt.z(), out);
+    }
+
+    /// \brief Converts a pose stamped message into a navigation goal string.
     ///
     /// See pubNavGoal plugin for HBBA's script_engine for details.
     inline void poseStampedToNavGoal(
         const geometry_msgs::PoseStamped& msg, 
         std::string& out)
     {
-        std::stringstream ss;
-        ss << "{frame_id: '" << msg.header.frame_id << "', ";
-        ss << "x: " << msg.pose.position.x << ", ";
-        ss << "y: " << msg.pose.position.y << ", ";
-        ss << "t: " << tf::getYaw(msg.pose.orientation) << "}";
-        out = ss.str();
+        tf::Point pt(msg.pose.position.x,
+                     msg.pose.position.y,
+                     tf::getYaw(msg.pose.orientation));
+
+        poseToNavGoal(msg.header.frame_id, pt, out);
     }
 
     /// \brief Converts a standard string into a dialog string.
@@ -194,6 +216,44 @@ namespace iw_tools
             return true;
         } else {
             return false;
+        }
+    }
+
+    /// \brief Call the add_desire service for a single desire id.
+    ///
+    /// If a service client isn't provided, will use the ros::service::call(...)
+    /// interface, which is less efficient if you plan on calling this often
+    /// (costs an extra ROS master round trip for discovery).
+    void addDesire(const hbba_msgs::Desire& desire,
+                   ros::ServiceClient*      scl = NULL)
+    {
+        hbba_msgs::AddDesires::Request   req;
+        hbba_msgs::AddDesires::Response  res;
+
+        req.desires.push_back(desire);
+
+        if (scl != NULL) {
+            scl->call(req, res);
+        } else {
+            ros::service::call("add_desires", req, res);
+        }
+    }
+
+    /// \brief Call the remove_desire service for a single desire id.
+    ///
+    /// Same mechanism as addDesire, see other function for details.
+    void removeDesire(const std::string&    id,
+                      ros::ServiceClient*   scl = NULL)
+    {
+        hbba_msgs::RemoveDesires::Request   req;
+        hbba_msgs::RemoveDesires::Response  res;
+
+        req.ids.push_back(id);
+
+        if (scl != NULL) {
+            scl->call(req, res);
+        } else {
+            ros::service::call("remove_desires", req, res);
         }
     }
 }
