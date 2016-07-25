@@ -687,6 +687,7 @@ class MotivationDef:
             self.output.extend([
                 'add_desires', 
                 'remove_desires', 
+                'update_desires', 
                 'eval_script'])
 
         if verbose:
