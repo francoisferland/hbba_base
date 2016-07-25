@@ -4,6 +4,7 @@ from xml.dom import minidom
 from sets import Set
 import os
 import stat
+import json
 
 # Some constant expressions that are formatted later:
 
@@ -259,7 +260,7 @@ class Structure:
 
         s = {'hbba': {'solver_model': {'strategies': strats, 'res_caps': caps}}}
         n = Element("rosparam")
-        n.text = str(s)
+        n.text = json.dumps(s)
 
         return n
 
