@@ -7,6 +7,10 @@ hbba_conf:
 # bash ros utils.
 - include: {pkg: "hbba_synth", file: "common.yaml"}
 
+# Root launch file includes, always included first in the generated main launch
+# file (but still in order of appearance).
+- include: {pkg: "hbba_synth", file: "base_nodes_r2.launch"}
+
 # Root remaps: topics are tested according to these for the actual input/output
 # topic names.
 # If a target ("to") is already registered as a remap, the second registration

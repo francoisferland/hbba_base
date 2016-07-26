@@ -54,6 +54,11 @@ class LaunchDef:
             }))
         return elems
 
+class RootLaunchDef(LaunchDef):
+    def __init__(self, content, structure, verbose=False):
+        LaunchDef.__init__(self, content, verbose)
+        structure.addRootLaunch(self)
+
 class TopicFilterDef:
     def __init__(self, name, filter_type, verbose=False):
         self.name        = name
@@ -816,6 +821,7 @@ typemap = {
     'motivation': MotivationDef,
     'emo_intensity': EmoIntensityDef,
     'custom_script': CustomScriptDef,
-    'iwo_ruleset': IWORulesetDef
+    'iwo_ruleset': IWORulesetDef,
+    'launch': RootLaunchDef
 }
 

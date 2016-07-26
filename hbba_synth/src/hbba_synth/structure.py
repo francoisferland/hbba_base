@@ -93,6 +93,7 @@ class Structure:
         self.emoIntensities = {}
         self.customScript = ""
         self.iwoRuleset = ""
+        self.rootLaunch = []
 
     def addInclude(self, i):
         self.includes.append(i)
@@ -151,6 +152,9 @@ class Structure:
 
     def addIWORuleset(self, s):
         self.iwoRuleset += s + "\n"
+
+    def addRootLaunch(self, rl):
+        self.rootLaunch.append(rl)
 
     def registerExploitationMatch(self, b, d):
         p = b.priority
@@ -329,6 +333,10 @@ class Structure:
         # enumeration. This is not ideal, but necessary even if we don't use the
         # XML elements in model-only mode.
         launch_elem = Element("launch")
+
+        # Always include included launch files first
+        for rl in self.rootLaunch:
+            launch_elem.extend(rl.generateXML(self))
 
         if (not opts.behavior_based):
             if (not opts.no_base_nodes):
