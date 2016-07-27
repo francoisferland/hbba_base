@@ -224,8 +224,8 @@ namespace iw_tools
     /// If a service client isn't provided, will use the ros::service::call(...)
     /// interface, which is less efficient if you plan on calling this often
     /// (costs an extra ROS master round trip for discovery).
-    void addDesire(const hbba_msgs::Desire& desire,
-                   ros::ServiceClient*      scl = NULL)
+    inline void addDesire(const hbba_msgs::Desire& desire,
+                          ros::ServiceClient*      scl = NULL)
     {
         hbba_msgs::AddDesires::Request   req;
         hbba_msgs::AddDesires::Response  res;
@@ -242,8 +242,8 @@ namespace iw_tools
     /// \brief Call the remove_desire service for a single desire id.
     ///
     /// Same mechanism as addDesire, see other function for details.
-    void removeDesire(const std::string&    id,
-                      ros::ServiceClient*   scl = NULL)
+    inline void removeDesire(const std::string&    id,
+                             ros::ServiceClient*   scl = NULL)
     {
         hbba_msgs::RemoveDesires::Request   req;
         hbba_msgs::RemoveDesires::Response  res;
