@@ -237,18 +237,17 @@ class ProcModuleDef:
             self.structure.addRootRemapEx("/" + self.name + "/" + t.name, t.src)
 
     def inputFilterName(self, name):
-        return self.name + "_" + name + "_filter"
+        return self.name + "_" + name.replace("/", "_") + "_filter"
 
     def createInputFilter(self, topic):
         elems = []
-        filter_name = "{0}_{1}_filter".format(self.name, topic.src)
-        node_name = "{0}_{1}_filter".format(self.name, topic.src)
+        filter_name = self.inputFilterName(topic.src)
         filter_type = "GenericDivider"
         if self.verbose:
             print "Adding filter {0}".format(filter_name)
         self.structure.addFilter(FilterDef(filter_name, filter_type))
         filt_node = Element("node", attrib = {
-            'name': node_name,
+            'name': filter_name,
             'pkg': 'topic_filters',
             'type': 'generic_divider_node',
             'args': 
@@ -264,14 +263,6 @@ class ProcModuleDef:
             }))
 
         elems.append(filt_node)
-#        elems.append(Element("node", attrib={
-#            'name': "register_{0}".format(node_name),
-#            'pkg': 'topic_filters_manager',
-#            'type': 'register',
-#            'args': "{0} {1}".format(
-#                filter_name, 
-#                filter_type)
-#            }))
         return elems
 
     def generateXML(self, structure, opts):
