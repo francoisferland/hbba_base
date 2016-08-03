@@ -235,7 +235,7 @@ namespace iw_tools
         if (scl != NULL) {
             scl->call(req, res);
         } else {
-            ros::service::call("add_desires", req, res);
+            ros::service::call("/hbba/add_desires", req, res);
         }
     }
 
@@ -253,7 +253,7 @@ namespace iw_tools
         if (scl != NULL) {
             scl->call(req, res);
         } else {
-            ros::service::call("remove_desires", req, res);
+            ros::service::call("/hbba/remove_desires", req, res);
         }
     }
 }
