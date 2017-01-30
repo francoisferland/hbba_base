@@ -106,7 +106,7 @@ include_directories(
 # )
 add_library(${PROJECT_NAME}
     src/generic.cpp
-#   src/generic_async.cpp
+    src/generic_async.cpp
     src/shapeshifter_pub.cpp
 )
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
@@ -114,7 +114,7 @@ add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_generate_messages_cpp)
 
 add_library(abtr_priority_nodelets
     src/abtr_priority_nodelet.cpp
-#    src/async_abtr_priority_nodelet.cpp
+    src/async_abtr_priority_nodelet.cpp
 )
 target_link_libraries(abtr_priority_nodelets ${PROJECT_NAME} ${catkin_LIBRARIES})
 

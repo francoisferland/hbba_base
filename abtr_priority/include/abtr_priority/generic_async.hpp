@@ -46,7 +46,7 @@ namespace abtr_priority
 		}
 
 	private:
-		typedef ASyncBackEnd<topic_tools::ShapeShifter> ABackEndType;
+		typedef AsyncBackEnd<topic_tools::ShapeShifter> BackEndType;
 		BackEndType::Ptr back_;
 		typedef FrontEnd<topic_tools::ShapeShifter, BackEndType> FrontEndType;
 		FrontEndType::Ptr front_;

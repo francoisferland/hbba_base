@@ -19,7 +19,7 @@ namespace abtr_priority
 			ros::NodeHandle n = getNodeHandle();
             ros::NodeHandle np = getPrivateNodeHandle();
 
-            impl_.reset(new GenericAsync(n, np);
+            impl_.reset(new GenericAsync(n, np));
 		}
 
 	private:
