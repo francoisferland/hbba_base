@@ -86,7 +86,7 @@ generate_messages(
 catkin_package(
   INCLUDE_DIRS include
   # LIBRARIES engine_v8
-  CATKIN_DEPENDS roscpp std_msgs
+  CATKIN_DEPENDS roscpp std_msgs hbba_msgs
 #  DEPENDS system_lib
 )
 
@@ -103,9 +103,7 @@ include_directories(
 )
 
 ## Declare a cpp library
-# add_library(audio_tools
-#   src/${PROJECT_NAME}/audio_tools.cpp
-# )
+
 add_library(generic_divider src/generic_divider_nodelet.cpp)
 target_link_libraries(generic_divider ${catkin_LIBRARIES})
 add_executable(generic_divider_node src/generic_divider.cpp)
