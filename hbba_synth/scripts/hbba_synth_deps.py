@@ -4,6 +4,7 @@ import re
 import yaml
 import sys
 import subprocess
+import os
 
 from roslib.packages import find_resource
 
@@ -17,9 +18,21 @@ def parse(fn):
         v = yaml.load(l)
         if (v is None):
             continue
+        res = []
         pkg = v[0]['include']['pkg']
         src = v[0]['include']['file']
-        path = find_resource(pkg, src)[0]
+        try:
+            res = find_resource(pkg,src)
+        except:
+            base_dir = os.path.dirname(fn)
+            for root, dirs, files in os.walk(base_dir):
+                if src in files:
+                    res.append(os.path.join(root,fn))
+
+        if (len(res) == 0):
+            exit(-1)
+
+        path = res[0]
         print path 
         parse(path)
 

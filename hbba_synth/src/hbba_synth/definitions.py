@@ -1,6 +1,7 @@
 from xml.etree.ElementTree import Element, tostring
 from file_parser import FileParser
 from time import time
+import os
 
 # {0}: name
 # {1}: utility (ResourceUsage string)
@@ -514,14 +515,22 @@ class IncludeDef:
                 self.fname,
                 self.pkg)
 
-        structure.addInclude(self.getPath())
-        p = Parser(self.getPath(), structure)
+        structure.addInclude(self.getPath(structure))
+        p = Parser(self.getPath(structure), structure)
         p.parse(verbose)
 
 
-    def getPath(self):
+    def getPath(self, structure):
         from roslib.packages import find_resource
-        loc = find_resource(self.pkg, self.fname)
+        loc = []
+        try:
+            loc = find_resource(self.pkg, self.fname)
+        except:
+            # rospack failed, look in source:
+            for root, dirs, files in os.walk(structure.getSourcePath()):
+                if self.fname in files:
+                    loc.append(os.path.join(root, self.fname))
+
         if len(loc) < 1:
             print "Error: {0} cannot be found in {1}.".format(
                 self.fname, self.pkg)

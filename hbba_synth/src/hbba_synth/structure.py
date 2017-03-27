@@ -95,6 +95,15 @@ class Structure:
         self.iwoRuleset = ""
         self.rootLaunch = []
 
+        self.sourcePath = "."
+    
+    def setSourcePath(self, sp):
+        # Starting point for finding include files if rospack fails.
+        self.sourcePath = sp
+
+    def getSourcePath(self):
+        return self.sourcePath
+
     def addInclude(self, i):
         self.includes.append(i)
 

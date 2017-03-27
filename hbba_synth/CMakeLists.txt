@@ -124,6 +124,8 @@ include_directories(
 ## in contrast to setup.py, you can choose the destination
 install(PROGRAMS
   scripts/hbba_synth
+  scripts/hbba_synth_deps.py
+  scripts/hbba_synth_deps.sh
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
@@ -142,11 +144,10 @@ install(PROGRAMS
 # )
 
 ## Mark other files for installation (e.g. launch and bag files, etc.)
-# install(FILES
-#   # myfile1
-#   # myfile2
-#   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-# )
+install(FILES
+  hbba_cfg/common.yaml
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/hbba_cfg
+)
 
 #############
 ## Testing ##

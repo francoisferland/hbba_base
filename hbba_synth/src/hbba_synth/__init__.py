@@ -54,6 +54,7 @@ def main():
     structure = Structure()
 
     for f in args:
+        structure.setSourcePath(os.path.dirname(f))
         if (opts.includes):
             p = DepsParser(f, structure)
         else:
