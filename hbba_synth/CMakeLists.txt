@@ -148,6 +148,11 @@ install(FILES
   hbba_cfg/common.yaml
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/hbba_cfg
 )
+install(FILES
+  launch/base_nodes_r2.launch
+  launch/base_events.launch
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch
+)
 
 #############
 ## Testing ##

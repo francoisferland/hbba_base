@@ -27,7 +27,7 @@ def parse(fn):
             base_dir = os.path.dirname(fn)
             for root, dirs, files in os.walk(base_dir):
                 if src in files:
-                    res.append(os.path.join(root,fn))
+                    res.append(os.path.join(root,src))
 
         if (len(res) == 0):
             exit(-1)
