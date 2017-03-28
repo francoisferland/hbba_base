@@ -242,7 +242,7 @@ void EventsGenerator::cem(
 
 bool EventsGenerator::cemCB(
 		hbba_msgs::CreateExploitationMatcher::Request& req,
-		hbba_msgs::CreateExploitationMatcher::Response& res)
+		hbba_msgs::CreateExploitationMatcher::Response&)
 {
     cem(req.topic, req.matches);
 	return true;
@@ -250,7 +250,7 @@ bool EventsGenerator::cemCB(
 
 bool EventsGenerator::ctemCB(
 		hbba_msgs::RegisterTopicExploitationMatches::Request& req,
-		hbba_msgs::RegisterTopicExploitationMatches::Response& res)
+		hbba_msgs::RegisterTopicExploitationMatches::Response&)
 {
 	tem_map_[req.topic] = req.matches;
 	return true;
