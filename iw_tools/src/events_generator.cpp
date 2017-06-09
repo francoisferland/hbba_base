@@ -9,9 +9,9 @@ EventsGenerator::EventsGenerator(ros::NodeHandle& n, ros::NodeHandle& np)
 	np.param("exp_timeout", p, 0.5);
 	exp_timeout_ = ros::Duration(p);
 
-	sub_desires_ = n.subscribe("desires_set", 1,
+	sub_desires_ = n.subscribe("desires_set", 100,
 			&EventsGenerator::desiresCB, this);
-	sub_intention_ = n.subscribe("intention", 1,
+	sub_intention_ = n.subscribe("intention", 100,
 			&EventsGenerator::intentionCB, this);
 	srv_cem_ = n.advertiseService("create_exploitation_matcher",
 			&EventsGenerator::cemCB, this);
