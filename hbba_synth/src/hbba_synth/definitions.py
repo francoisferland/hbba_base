@@ -418,6 +418,16 @@ class StratDef:
                 else:
                     print "Error: custom_bringup element is not a string."
                     exit(-1)
+            self.custom_bringdn = ""
+            if ('custom_bringdn' in content):
+                cb = content['custom_bringdn']
+                if type(cb) is str:
+                    if verbose:
+                        print "Adding custom bringdown script for " + self.name
+                    self.custom_bringdn = cb
+                else:
+                    print "Error: custom_bringdn element is not a string."
+                    exit(-1)
                 
         except KeyError as e:
             print "Error: Missing {0} in {1}".format(e, self.name)
@@ -464,6 +474,8 @@ class StratDef:
         js_source += "function {0}(params) {{\n".format(bdn_name)
         for m in self.modules:
             js_source += m.generateDeactivationJS()
+        if (self.custom_bringdn != ""):
+            js_source += self.custom_bringdn + "\n"
         js_source += "}\n"
 
         return bup_name, bdn_name, js_source
