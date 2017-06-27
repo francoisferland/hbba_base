@@ -32,7 +32,8 @@ namespace iw
     /// change names might not be properly tracked.
     ///
     /// Monitors TF for the robot's position, see "robot_frame" for details.
-    /// Currently, only the position is tracked, orientation has no effect.
+    /// Currently, both position and orientation are tracked.
+    /// However, orientation tracking can be disabled.
     //
     /// Parameters:
     ///  - goto_class:  Class name of GoTo desire class.
@@ -43,9 +44,13 @@ namespace iw
     ///                 This frame will be transformed in the goal's reference
     ///                 frame, usually a fixed one such as "/map".
     ///                 Default: "base_link"
-    ///  - goal_eps:    Minimal distance from the goal to be considered as
+    ///  - goal_eps_d:  Minimal distance from the goal to be considered as
     ///                 reached.
-    ///                 Default: 2.0 m.
+    ///                 Default: 0.10 m.
+    ///  - goal_eps_a:  Minimum yaw angle from the goal to be considered as
+    ///                 reached.
+    ///                 Test is disabled if negative.
+    ///                 Default: 0.30 rad.
     ///  - period:      Update period for event detection.
     ///                 Note: events detection is performed on each reception of
     ///                 a new desires set.
@@ -68,7 +73,8 @@ namespace iw
 
         std::string                    goto_class_;
         std::string                    robot_frame_;
-        double                         goal_eps_;
+        double                         goal_eps_d_;
+        double                         goal_eps_a_;
 
         std::vector<hbba_msgs::Desire> desires_;
 
@@ -86,7 +92,8 @@ namespace iw
         {
             np.param("goto_class",  goto_class_,  std::string("GoTo"));
             np.param("robot_frame", robot_frame_, std::string("base_link"));
-            np.param("goal_eps",    goal_eps_,    2.0);
+            np.param("goal_eps_d",  goal_eps_d_,    0.1);
+            np.param("goal_eps_a",  goal_eps_a_,    0.3);
 
             sub_desires_ = n.subscribe(
                 "desires_set", 
@@ -239,7 +246,19 @@ namespace iw
                 return false;
             }
 
-            return (robot.getOrigin() - pose.getOrigin()).length() <= goal_eps_;
+            bool dist_test =  (robot.getOrigin() - pose.getOrigin()).length()
+                           <= goal_eps_d_;
+
+            bool ang_test = true;
+            if (goal_eps_a_ > 0.0) {
+                double r_yaw = tf::getYaw(robot.getRotation());
+                double p_yaw = tf::getYaw(pose.getRotation());
+                ang_test = fabs(r_yaw - p_yaw) < goal_eps_a_;
+            }
+
+            return dist_test && ang_test;
+
+
         }
 
     };
