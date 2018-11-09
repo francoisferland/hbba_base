@@ -274,7 +274,11 @@ class Structure:
         for r in self.resources.values():
             caps[r.name] = r.value
 
-        s = {'hbba': {'solver_model': {'strategies': strats, 'res_caps': caps}}}
+        s = {'hbba': {'solver_model': {
+            'custom_script': self.customScript,
+            'strategies': strats,
+            'res_caps': caps
+            }}}
         n = Element("rosparam")
         n.text = json.dumps(s)
 
