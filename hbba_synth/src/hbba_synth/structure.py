@@ -224,7 +224,7 @@ class Structure:
             'from': iname,
             'to': self.getRootTopicFullName(oname)})
 
-    def generateArbitrationXML(self, topic, opts):
+    def generateArbitrationXML(self, topic, machine, opts):
         if topic in self.arbitrationTypes:
             abtr_pkg = self.arbitrationTypes[topic].pkg
             abtr_type = self.arbitrationTypes[topic].node
@@ -249,6 +249,9 @@ class Structure:
         n.append(Element("remap", attrib = {
             'from': "cmd/register",
             'to': "{0}/register".format(root_topic)}))
+
+        if machine != '':
+            n.set('machine', machine)
 
         if (opts.new_rev):
             # Build behavior output registration model:
@@ -318,7 +321,7 @@ class Structure:
         behavior_topics = Set([])
         for b in self.behaviors.values():
             for o in b.output:
-                behavior_topics.add(o)
+                behavior_topics.add((o, b.machine))
         if verbose:
             print "Behavior topics: " + str(behavior_topics)
 
@@ -366,9 +369,9 @@ class Structure:
             for m in self.motivations.values():
                 main_elems.extend(m.generateXML(self))
         if not opts.disable_arbitration:
-            for t in behavior_topics:
+            for (t, m) in behavior_topics:
                 if t not in self.integratedArbitration:
-                    main_elems.extend(self.generateArbitrationXML(t, opts))
+                    main_elems.extend(self.generateArbitrationXML(t, m, opts))
 
         if not opts.model_only:
             launch_elem.extend(main_elems)
