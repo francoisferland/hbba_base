@@ -90,6 +90,10 @@ class BehaviorDef:
             self.services = content['services']
         else:
             self.services = []
+        if 'machine' in content:
+            self.machine = content['machine']
+        else:
+            self.machine = ''
 
         structure.addBehavior(self)
         if verbose:
@@ -112,14 +116,19 @@ class BehaviorDef:
 
     def appendFilter(self, grp, elems, node_name, name, topic_in, topic_out):
         # elems should be a namespace containing grp
-        grp.append(Element("node", attrib={
+        filt_node = Element("node", attrib={
             'name': node_name,
             'pkg': 'topic_filters',
             'type': 'generic_divider_node',
             'args': 
             "{0} {1}".format(
                 topic_in, topic_out)
-            }))
+            })
+
+        if self.machine != '':
+            filt_node.set('machine', self.machine)
+
+        grp.append(filt_node)
 #        elems.append(Element("node", attrib={
 #            'name': "register_{0}_{1}".format(
 #                node_name,
@@ -227,6 +236,11 @@ class ProcModuleDef:
         else:
             self.services = []
 
+        if 'machine' in content:
+            self.machine = content['machine']
+        else:
+            self.machine = ''
+
         structure.addProcModule(self)
 
         if verbose:
@@ -256,6 +270,9 @@ class ProcModuleDef:
                     self.structure.getRootTopicFullName(topic.src), 
                     self.name, topic.name)
         })
+
+        if self.machine != '':
+            filt_node.set('machine', self.machine)
 
         if (topic.filter_type == 'GenericDividerAD'):
             filt_node.append(Element("param", attrib = {
