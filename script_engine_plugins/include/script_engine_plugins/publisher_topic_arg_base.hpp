@@ -51,10 +51,9 @@ namespace script_engine_plugins
 			pub_map_t::iterator i = pub_map_.find(topic_name);
 			if(i == pub_map_.end())
 			{
-                ros::Publisher npub = n.advertise<T>(topic_name, 5);
+                ros::Publisher npub = n.advertise<T>(topic_name, 5, true);
 				pub_map_[std::string(topic_name)] = npub;
                 i = pub_map_.find(topic_name);
-				sleep(1);
 			}
             pub = &(i->second);
 
