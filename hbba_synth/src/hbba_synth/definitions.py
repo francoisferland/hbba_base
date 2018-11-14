@@ -39,20 +39,55 @@ class FilterTypeDef:
     def generateSetLevel(self, name, level):
         return "{0}({1}, {2})".format(self.func, name, level)
 
+class LaunchArgDef:
+    def __init__(self, name, value, verbose=False):
+        self.name = name
+        self.value = str(value)
+
+        if type(value) is bool:
+            self.value = self.value.lower()
+
+        if verbose:
+            print "Emitted launch arg {0}={1}.".format(self.name, self.value)
+
+    def generateXML(self, structure):
+        elems = []
+        elems.append(Element("arg",
+            attrib={
+                'name': self.name,
+                'value': self.value
+            }))
+        return elems
+
 class LaunchDef:
     def __init__(self, content, verbose=False):
         self.pkg = content['pkg']
         self.path = content['path']
+        self.args = []
+
+        if 'args' in content:
+            args = content['args']
+            if (type(args) is dict):
+                for key,val in args.iteritems():
+                    self.args.append(LaunchArgDef(key, val, verbose))
+            else:
+                print "Warning: 'args' in launch (pkg={0}, path={1}) is not a " \
+                        "dictionary.".format(self.pkg, self.path)
 
         if verbose:
             print "Emitted launch element for {0}/{1}.".format(self.pkg,
                 self.path)
     def generateXML(self, structure):
         elems = []
-        elems.append(Element("include",
+        elem = Element("include",
             attrib={
                 'file': "$(find {0})/{1}".format(self.pkg, self.path)
-            }))
+            })
+
+        for arg in self.args:
+            elem.extend(arg.generateXML(structure))
+
+        elems.append(elem)
         return elems
 
 class RootLaunchDef(LaunchDef):
