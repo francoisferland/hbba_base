@@ -42,29 +42,35 @@ macro(add_hbba_cfg _BASENAME _SRC)
         ${_src_path}
     )
 
-    set(_HBBA_CFG_OPTS "-p")
+    list(APPEND _HBBA_CFG_OPTS "-p")
     # ARGN requires to be put in a variable before list(...) works:
     set(_vargs ${ARGN})
 
     list(FIND _vargs "BHVR" _opt_bhvr)
     if(NOT _opt_bhvr EQUAL -1)
         message("Building ${_BASENAME} in behavior mode.")
-        set(_HBBA_CFG_OPTS "${_HBBA_CFG_OPTS}b")
+        list(APPEND _HBBA_CFG_OPTS "-b")
     endif()
 
     list(FIND _vargs "EXTERNAL" _opt_external)
     if (NOT _opt_external EQUAL -1)
         message("Building ${_BASENAME} in external mode (no base nodes).")
-        set(_HBBA_CFG_OPTS "${_HBBA_CFG_OPTS}e")
+        list(APPEND _HBBA_CFG_OPTS "-e")
     endif()
 
     list(FIND _vargs "OLDREV" _opt_oldrev)
     if (NOT _opt_oldrev EQUAL -1)
         message("Building ${_BASENAME} with the old IW revision.")
-        set(_HBBA_CFG_OPTS "--old-rev ${_HBBA_CFG_OPTS}")
+        list(APPEND _HBBA_CFG_OPTS "--old-rev")
     endif()
 
-    set(_HBBA_CFG_OPTS "${_HBBA_CFG_OPTS}o")
+    list(FIND _vargs "NO_EVENT_GENERATORS" _opt_no_event_generators)
+    if (NOT _opt_no_event_generators EQUAL -1)
+        message("Building ${_BASENAME} with no event generators.")
+        list(APPEND _HBBA_CFG_OPTS "--no-event-generators")
+    endif()
+
+    list(APPEND _HBBA_CFG_OPTS "-o")
 
     message("Gathering HBBA dependencies for ${_BASENAME}...")
     execute_process(
