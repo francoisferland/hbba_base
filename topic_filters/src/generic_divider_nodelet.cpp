@@ -22,6 +22,5 @@ namespace topic_filters
 
 }
 
-PLUGINLIB_DECLARE_CLASS(topic_filters, GenericDivider,
-    topic_filters::GenericDivider, nodelet::Nodelet)
+PLUGINLIB_EXPORT_CLASS(topic_filters::GenericDivider, nodelet::Nodelet)
 
