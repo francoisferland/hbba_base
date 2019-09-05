@@ -20,13 +20,14 @@ namespace iw_tools
     ///
     /// This class is meant as a motivation sample.
     /// It takes stamped poses as input and generate a corresponding desire.
+    /// It also serves an action server named "goto".
     /// The desire is removed when the goal is achieved (monitored by HBBA
     /// events).
     ///
     /// Action:
     ///  - goto:        A move_base_msgs/MoveBaseAction server.
     /// Topics:
-    ///  - ~goal:       A geometry_msgs/PoseStamped input.
+    ///  - goto_goal:   A geometry_msgs/PoseStamped input.
     ///  - hbba_events: HBBA events input.
     ///
     class GoToGenerator
@@ -62,7 +63,7 @@ namespace iw_tools
             desires_set_(req_add_desires_.request.desires),
             desires_ids_(req_rem_desires_.request.ids)
         {
-            sub_goal_ = np.subscribe("goal", 1, &GoToGenerator::goalCB, this);
+            sub_goal_ = n.subscribe("goto_goal", 1, &GoToGenerator::goalCB, this);
 
             scl_add_desires_ = n.serviceClient<hbba_msgs::AddDesires>(
                 "add_desires");
