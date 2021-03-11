@@ -9,6 +9,8 @@ uint8   EXP_OFF     = 6 # The desire's exploitation stopped.
 uint8   EXP_TIMEOUT = 7 # The desire has not been exploited before timeout.
 uint8   ACC_ON      = 8 # The desire's goal is or has been accomplished.
 uint8   ACC_OFF     = 9 # The desire's goal has stopped being accomplished.
+uint8   IMP_ON      = 10 # The desire is impossible to accomplish in the current conditions.
+uint8   IMP_OFF     = 11 # The desire is possible to accomplish once more.
 
 string  desire      # The desire associated with the event.
 string  desire_type # The desire's class.
