@@ -309,15 +309,15 @@ class ProcModuleDef:
         if self.machine != '':
             filt_node.set('machine', self.machine)
 
-        if not topic.latched:
-            filt_node.append(Element("param", attrib={
+        # Adding parameters
+        filt_node.append(Element("param", attrib={
                 'name': 'latch_size',
-                'value': '0'
+                'value': '1' if topic.latched else '0'
             }))
 
-        if (topic.filter_type == 'GenericDividerAD'):
-            filt_node.append(Element("param", attrib = {
-                'name':  'auto_disconnect',
+        if topic.filter_type == 'GenericDividerAD':
+            filt_node.append(Element("param", attrib={
+                'name': 'auto_disconnect',
                 'value': 'True'
             }))
 
