@@ -309,9 +309,15 @@ class ProcModuleDef:
         if self.machine != '':
             filt_node.set('machine', self.machine)
 
-        if (topic.filter_type == 'GenericDividerAD'):
-            filt_node.append(Element("param", attrib = {
-                'name':  'auto_disconnect',
+        # Adding parameters
+        filt_node.append(Element("param", attrib={
+                'name': 'latch_size',
+                'value': '1' if topic.latched else '0'
+            }))
+
+        if topic.filter_type == 'GenericDividerAD':
+            filt_node.append(Element("param", attrib={
+                'name': 'auto_disconnect',
                 'value': 'True'
             }))
 
@@ -830,6 +836,11 @@ class TopicDef:
                     self.filtered = c['filtered']
                 else:
                     self.filtered = None
+                if 'latched' in c:
+                    self.latched = c['latched']
+                else:
+                    # Latched by default
+                    self.latched = True
                 if 'type' in c:
                     self.filter_type = c['type']
                 else:
@@ -841,6 +852,7 @@ class TopicDef:
         else:
             self.name = content
             self.src = content
+            self.latched = True
             self.filtered = None
             self.filter_type = "GenericDivider"
 
